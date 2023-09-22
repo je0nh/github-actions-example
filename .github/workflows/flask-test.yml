@@ -22,7 +22,7 @@ jobs:
       run: docker image build -t myflask-test .
 
     - name: Run Flask Docker container
-      run: docker container run -d --name myflask-ac -p 8001:8001 myflak-test
+      run: docker container run -d --name myflask-ac -p 8001:8001 myflask-test
 
     - name: Test Flask app
       run: |
