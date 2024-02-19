@@ -5,8 +5,6 @@ on: [push]
 jobs:
   checkout:
     run-on: ubuntu-latest
-
     name: ci/cd test
-
-    step:
+    steps:
       - run: ls -al
