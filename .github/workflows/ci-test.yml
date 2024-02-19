@@ -1,0 +1,12 @@
+name: Automatically Integretion
+
+on: [push]
+
+jobs:
+  checkout:
+    run-on: ubuntu-latest
+
+    name: ci/cd test
+
+    step:
+      - run: ls -al
