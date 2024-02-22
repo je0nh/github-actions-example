@@ -39,3 +39,4 @@ jobs:
           curl -X POST -H "Content-Type: application/json" -d '{"content":"Build failed!"}' ${{ secrets.DISCORD_WEBHOOK }}
           echo $json | curl -X POST -H "Content-Type: application/json" -d @- ${{ secrets.DISCORD_WEBHOOK }}
         continue-on-error: true
+#
