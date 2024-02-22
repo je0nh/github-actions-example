@@ -18,8 +18,14 @@ jobs:
           autopep8 ./test.py
           pylint ./test.py
 
+      - name: Generate Environment Variables File
+        run: |
+          echo "DISCORD_WEBHOOK=$DISCORD_WEBHOOK" >> .env
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }
+      
       - name: Notify on success
         if: success()
         run: |
-          curl -X POST -H "Content-Type: application/json" -d '{"content":"Build succeeded!"}' ${{ secrets.DISCORD_WEBHOOK_URL }}
+          curl -X POST -H "Content-Type: application/json" -d '{"content":"Build succeeded!"}' ${{ secrets.DISCORD_WEBHOOK }}
 
