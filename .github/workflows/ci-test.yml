@@ -11,21 +11,20 @@ jobs:
       - name: Install requeirments package
         run: |
           pip install --upgrade pip
-          pip install -r ./requirements.txt
+          pip install -r requirements.txt
 
       - name: pep8, pylint testing
         run: |
-          autopep8 ./test.py
-          pylint ./test.py
+          autopep8 test.py
+          pylint test.py
 
       - name: Generate Environment Variables File
         run: |
           echo "DISCORD_WEBHOOK=$DISCORD_WEBHOOK" >> .env
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       
       - name: Notify on success
         if: success()
         run: |
           curl -X POST -H "Content-Type: application/json" -d '{"content":"Build succeeded!"}' ${{ secrets.DISCORD_WEBHOOK }}
-
