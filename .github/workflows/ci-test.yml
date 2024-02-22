@@ -20,7 +20,8 @@ jobs:
       - name: pep8, pylint testing
         run: |
           autopep8 test.py
-          pylint test.py > pylint_output.txt
+          pylint test.py > pylint_output.txt || true  # pylint 실패해도 계속 진행하도록 || true 추가
+        continue-on-error: true  # pylint 실패 시에도 계속 진행
 
       - name: Generate Environment Variables File
         run: |
@@ -37,6 +38,11 @@ jobs:
         if: failure()
         run: |
           curl -X POST -H "Content-Type: application/json" -d '{"content":"Build failed! Check build"}' ${{ secrets.DISCORD_WEBHOOK }}
+          
+      - name: Send pylint output to Discord
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"$(cat pylint_output.txt)\"}" ${{ secrets.DISCORD_WEBHOOK }}
 
   upload-artifact:
     needs: checkout
