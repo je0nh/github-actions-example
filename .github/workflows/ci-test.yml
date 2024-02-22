@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  checkout:
+  success:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -31,4 +31,36 @@ jobs:
       
       - name: Send pylint output to Discord
         run: |
-          curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"$(cat pylint_output.txt)\"}" ${{ secrets.DISCORD_WEBHOOK }}
+          curl -X POST -H "Content-Type: application/json" -d '{"content":"Build succeeded!"}' ${{ secrets.DISCORD_WEBHOOK }}
+
+
+  failure:
+    runs-on: ubuntu-latest
+    needs: success
+    if: failure()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Install requirements package
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+  
+      - name: pep8, pylint testing
+        run: |
+          autopep8 test.py
+          pylint test.py > pylint_output.txt || true
+        continue-on-error: true
+  
+      - name: Generate Environment Variables File
+        run: |
+          echo "DISCORD_WEBHOOK=$DISCORD_WEBHOOK" >> .env
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+  
+      - name: Send pylint output to Discord
+        run: |
+          pylint_output=$(cat pylint_output.txt)
+          json='{"content":"'"$pylint_output"'"}'
+          echo $json | curl -X POST -H "Content-Type: application/json" -d @- $DISCORD_WEBHOOK
