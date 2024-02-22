@@ -36,6 +36,6 @@ jobs:
           pylint test.py > pylint_output.txt || true
           pylint_output=$(cat pylint_output.txt)
           json='{"content":"'"$pylint_output"'"}'
-          curl -X POST -H "Content-Type: application/json" -d {"content":"Build failed!"} ${{ secrets.DISCORD_WEBHOOK }}
+          curl -X POST -H "Content-Type: application/json" -d '{"content":"Build failed!"}' ${{ secrets.DISCORD_WEBHOOK }}
           echo $json | curl -X POST -H "Content-Type: application/json" -d @- ${{ secrets.DISCORD_WEBHOOK }}
         continue-on-error: true
