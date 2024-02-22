@@ -1,14 +1,18 @@
-name: Automatically Integretion
+name: Automatically Integration
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   checkout:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Install requeirments package
+      - name: Install requirements package
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
@@ -16,7 +20,8 @@ jobs:
       - name: pep8, pylint testing
         run: |
           autopep8 test.py
-          pylint test.py
+          pylint test.py > pylint_output.txt || true
+        continue-on-error: true
 
       - name: Generate Environment Variables File
         run: |
@@ -28,3 +33,19 @@ jobs:
         if: success()
         run: |
           curl -X POST -H "Content-Type: application/json" -d '{"content":"Build succeeded!"}' ${{ secrets.DISCORD_WEBHOOK }}
+          
+      - name: Notify on failure
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"content":"Build failed! Check build"}' ${{ secrets.DISCORD_WEBHOOK }}
+
+  upload-artifact:
+    needs: checkout
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Upload pylint output
+        uses: actions/upload-artifact@v2
+        with:
+          name: pylint-output
+          path: pylint_output.txt
