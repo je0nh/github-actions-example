@@ -20,6 +20,8 @@ jobs:
           pylint test.py
 
       - name: Generate Environment Variables File
+        run: |
+          echo "DISCORD_WEBHOOK=$DISCORD_WEBHOOK" >> .env
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       
