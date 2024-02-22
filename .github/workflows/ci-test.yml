@@ -29,18 +29,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       
-      - name: Notify on success
-        if: success()
-        run: |
-          curl -X POST -H "Content-Type: application/json" -d '{"content":"Build succeeded!"}' ${{ secrets.DISCORD_WEBHOOK }}
-          
-      - name: Notify on failure
-        if: failure()
-        run: |
-          curl -X POST -H "Content-Type: application/json" -d '{"content":"Build failed! Check build"}' ${{ secrets.DISCORD_WEBHOOK }}
-          
       - name: Send pylint output to Discord
-        if: failure()
         run: |
           curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"$(cat pylint_output.txt)\"}" ${{ secrets.DISCORD_WEBHOOK }}
 
