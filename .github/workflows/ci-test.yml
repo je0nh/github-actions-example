@@ -20,8 +20,7 @@ jobs:
       - name: pep8, pylint testing
         run: |
           autopep8 test.py
-          pylint test.py > pylint_output.txt || true
-        continue-on-error: true
+          pylint test.py > pylint_output.txt
 
       - name: Generate Environment Variables File
         run: |
