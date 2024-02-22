@@ -61,5 +61,5 @@ jobs:
       - name: Send pylint output to Discord
         run: |
           pylint_output=$(cat pylint_output.txt)
-          json='{"content":"'"$pylint_output"'"}'
+          json='{"content":"'Build failed! \n "$pylint_output"'"}'
           echo $json | curl -X POST -H "Content-Type: application/json" -d @- ${{ secrets.DISCORD_WEBHOOK }}
