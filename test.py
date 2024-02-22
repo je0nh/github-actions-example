@@ -1,7 +1,7 @@
-# pylint disable=C0301
-# pylint disable=C0303
-# pylint disable=C0114
-# pylint disable=R1710
+# pylint: disable=C0301
+# pylint: disable=C0303
+# pylint: disable=C0114
+# pylint: disable=R1710
 
 import time
 from datetime import datetime
