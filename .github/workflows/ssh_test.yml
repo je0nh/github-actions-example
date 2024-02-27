@@ -13,5 +13,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          script: ssh_test.sh
+          script: ${{ secrets.SSH_SCRIPT }}
       
